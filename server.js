@@ -7,6 +7,7 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/books"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
+//models:
 const Author = mongoose.model('Author', {
   name: String
 })
@@ -18,6 +19,7 @@ const Book = mongoose.model('Book', {
     ref: 'Author'
   }
 })
+
 
 if (process.env.RESET_DATABASE) {
   console.log('Resetting database!')
@@ -47,12 +49,12 @@ if (process.env.RESET_DATABASE) {
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
-//
+
 //   PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
 
-// Add middlewares to enable cors and json body parsing
+//Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(bodyParser.json())
 
@@ -86,7 +88,7 @@ app.get('/authors/:id/books', async (req, res) => {
 })
 
 app.get('/books', async (req, res) => {
-  const books = await Book.find().populate('author')
+  const books = await Book.find().populate('author') // include relationship with author
   res.json(books)
 })
 
